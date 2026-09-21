@@ -52,6 +52,14 @@ The terminal does not use an administrator cookie or session. Each terminal supp
 
 A shared Blade component system supplies the logo, SVG icons, navigation, cards, metric tiles, badges, buttons, tables, forms, alerts, empty states, and responsive drawer behavior. The global layout uses the approved navy/blue palette and contains the sidebar, global search, notifications, administrator menu, and logout.
 
+### Premium visual system and motion
+
+The entire website adopts one professional enterprise visual language rather than page-specific styling. It uses the supplied navy, blue, cyan, success, warning, danger, and purple tokens; a high-legibility sans-serif type scale; 12–18px radii; layered white surfaces; restrained shadows; and subtle blue background illumination. The CA identity appears consistently in the sidebar, login, terminal, empty states, and navigation without duplicating visual treatments.
+
+Motion serves feedback and orientation: page sections use short staggered entrance transitions, buttons and table rows have restrained hover and press responses, dropdowns and dialogs animate opacity and scale, and live-scan/terminal updates use a brief highlight state. Animation duration stays within 150–240ms and respects `prefers-reduced-motion`, which disables nonessential transitions. There are no looping decorative animations, excessive gradients, or motion that hides state changes.
+
+The desktop shell keeps a fixed, branded navigation rail and a high-information top bar. Tablet navigation collapses to icon-first mode, and mobile uses an accessible drawer. Data-heavy screens keep table headers and action controls legible with scroll containers, responsive summary cards, touch-sized controls, and clear loading, empty, error, and success states.
+
 Each page maps to the supplied visual references and real database data:
 
 - Dashboard: daily metrics, recent NFC scans, terminal health, daily presence grid, absence reasons, and weekly attendance.
