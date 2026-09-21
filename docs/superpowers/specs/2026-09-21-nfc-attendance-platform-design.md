@@ -80,6 +80,14 @@ Controllers coordinate requests and views. Form Requests own validation. Service
 
 Forms retain user input and show field-level validation. Terminal responses use stable JSON error codes for unsupported device, invalid credential, unknown/blocked card, inactive employee, duplicate scan, invalid action, and network recovery. Destructive administration actions require confirmation and audit records. NFC and password secrets are never placed in HTML or JavaScript.
 
+## Quality, performance, and accessibility baseline
+
+Every existing route, form, link, and visible action is audited during implementation. Working business flows are retained or replaced with an equivalent secure flow; disconnected mock buttons and hard-coded dashboard values are not introduced. Database access uses eager loading, pagination, indexed queries, transactions for multi-record writes, and Form Requests or equivalent server-side validation.
+
+All page templates use semantic headings, associated form labels, descriptive empty/error states, keyboard-accessible controls, visible focus rings, adequate color contrast, and non-color status text. Tables support search/filter state, pagination, row actions, and mobile overflow handling. Destructive operations use accessible confirmations; forms prevent duplicate submissions and show pending feedback.
+
+The shared CSS and JavaScript are consolidated to remove duplicate inline styles and dead behavior. Assets and images use suitable sizes and alt text. Public login/error pages receive complete metadata, while administration routes are excluded from indexing. The visual system is tested at 320, 375, 390, 430, 768, 1024, 1280, 1440, and 1920 pixel widths.
+
 ## Verification
 
-Feature tests cover admin login, invalid credentials, authorization, employee management, attendance/absence/planning access, NFC card assignment, terminal heartbeat, unknown and blocked cards, check-in/check-out, duplicate scans, idempotent replay, inactive employees, and terminal rejection. Unit tests cover scan action selection and attendance calculation. The complete suite, migrations, route list, and Vite build are run before delivery.
+Feature tests cover admin login, invalid credentials, authorization, employee management, attendance/absence/planning access, NFC card assignment, terminal heartbeat, unknown and blocked cards, check-in/check-out, duplicate scans, idempotent replay, inactive employees, and terminal rejection. Unit tests cover scan action selection and attendance calculation. Route and view checks cover navigation, forms, links, filters, pagination, empty states, and authorization. The complete suite, migrations, route list, logs, and Vite build are run before delivery.
