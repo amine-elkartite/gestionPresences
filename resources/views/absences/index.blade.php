@@ -11,47 +11,13 @@
         <h1 class="page-heading">Absences</h1>
         <div class="page-subtitle">Consultez, filtrez et enregistrez les absences.</div>
     </div>
+    <button type="button" class="btn btn-primary" data-open-dialog="absence-dialog"><x-icon name="plus" />Ajouter une absence</button>
 </div>
 
-<div class="metric-grid">
-    <div class="metric-card metric-absent">
-        <div class="metric-top">
-            <div class="metric-label">Aujourd’hui</div>
-            <div class="metric-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                    <path d="M9 9l6 6m0-6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
-                </svg>
-            </div>
-        </div>
-        <div class="metric-number">{{ $stats['today'] }}</div>
-        <div class="metric-subtitle">Absences du jour</div>
-    </div>
-
-    <div class="metric-card metric-conge">
-        <div class="metric-top">
-            <div class="metric-label">Ce mois-ci</div>
-            <div class="metric-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                    <path d="M7 4v3m10-3v3M5 10h14M7 14h4m-4 4h7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
-                </svg>
-            </div>
-        </div>
-        <div class="metric-number">{{ $stats['month'] }}</div>
-        <div class="metric-subtitle">Absences mensuelles</div>
-    </div>
-
-    <div class="metric-card metric-neutral">
-        <div class="metric-top">
-            <div class="metric-label">Total</div>
-            <div class="metric-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                    <path d="M8 7h8m-8 5h8m-8 5h5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
-                </svg>
-            </div>
-        </div>
-        <div class="metric-number">{{ $stats['total'] }}</div>
-        <div class="metric-subtitle">Absences enregistrées</div>
-    </div>
+<div class="metric-grid metric-grid-three">
+    <x-stat-card label="Aujourd’hui" :value="$stats['today']" tone="absent" icon="user-x" subtitle="Absences du jour" />
+    <x-stat-card label="Ce mois-ci" :value="$stats['month']" tone="conge" icon="calendar-days" subtitle="Absences mensuelles" />
+    <x-stat-card label="Total" :value="$stats['total']" tone="neutral" icon="files" subtitle="Absences enregistrées" />
 </div>
 
 <div class="card-box mb-4">
@@ -62,50 +28,11 @@
         </div>
     </div>
 
-    <div class="soft-panel">
-        <canvas id="absenceChart" height="80"></canvas>
-    </div>
-</div>
-
-<div class="card-box mb-4">
-    <div class="panel-head">
-        <div>
-            <h2 class="section-title">Ajouter une absence</h2>
-            <div class="section-sub">Création d’un motif pour une date donnée</div>
-        </div>
-    </div>
-
-    <form method="POST" action="{{ route('absences.store') }}">
-        @csrf
-
-        <div class="row g-3 align-items-end">
-            <div class="col-lg-4">
-                <label class="form-label">Employé</label>
-                <select class="form-select control-lg" name="user_id" required>
-                    <option value="">Sélectionner un employé</option>
-                    @foreach ($employees as $employee)
-                        <option value="{{ $employee->user_id }}">
-                            {{ $employee->name }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
-
-            <div class="col-lg-3">
-                <label class="form-label">Date</label>
-                <input type="date" class="form-control control-lg" name="date" value="{{ today()->toDateString() }}">
-            </div>
-
-            <div class="col-lg-3">
-                <label class="form-label">Motif</label>
-                <input type="text" class="form-control control-lg" name="reason" placeholder="Maladie, congé...">
-            </div>
-
-            <div class="col-lg-2">
-                <button class="btn btn-primary w-100 control-lg">Enregistrer</button>
-            </div>
-        </div>
-    </form>
+    @if($chartData->isNotEmpty())
+        <div class="absence-chart"><canvas id="absenceChart" aria-label="Évolution des absences du mois" role="img"></canvas></div>
+    @else
+        <x-empty-state title="Aucune absence ce mois-ci" description="La tendance apparaîtra après un premier enregistrement." icon="chart-no-axes-combined" />
+    @endif
 </div>
 
 <div class="card-box">
@@ -116,8 +43,8 @@
         </div>
 
         <form method="GET" class="d-flex flex-wrap gap-2">
-            <input class="form-control search-field" name="search" value="{{ $search }}" placeholder="Rechercher un employé">
-            <input type="date" class="form-control control-lg" name="date" value="{{ $date }}">
+            <input class="form-control search-field" name="search" value="{{ $search }}" placeholder="Rechercher un employé" aria-label="Rechercher un employé">
+            <input type="date" class="form-control control-lg" name="date" value="{{ $date }}" aria-label="Date des absences">
             <button class="btn btn-outline-primary px-4">Filtrer</button>
         </form>
     </div>
@@ -137,10 +64,10 @@
                 @forelse ($absences as $absence)
                     <tr>
                         <td>
-                            <div class="employee-cell">
+                            <div class="employee-identity"><x-user-avatar :name="$absence->user?->employee?->name ?? $absence->user?->name ?? 'Employé'" /><div class="employee-cell">
                                 <span class="employee-name">{{ $absence->user?->employee?->name ?? $absence->user?->name }}</span>
                                 <span class="employee-meta">{{ $absence->user?->employee?->position ?? '-' }}</span>
-                            </div>
+                            </div></div>
                         </td>
 
                         <td class="fw-semibold text-muted">
@@ -160,10 +87,10 @@
                         </td>
 
                         <td class="text-end">
-                            <form method="POST" action="{{ route('absences.destroy', $absence) }}">
+                            <form method="POST" action="{{ route('absences.destroy', $absence) }}" onsubmit="return confirm('Supprimer cette absence ?')">
                                 @csrf
                                 @method('DELETE')
-                                <button class="btn btn-sm btn-outline-danger">Supprimer</button>
+                                <button class="icon-button text-danger" title="Supprimer cette absence" aria-label="Supprimer cette absence"><x-icon name="trash-2" /></button>
                             </form>
                         </td>
                     </tr>
@@ -184,9 +111,11 @@
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<x-absence-dialog :employees="$employees" :date="today()->toDateString()" />
+<script src="{{ asset('vendor/chart.umd.js') }}"></script>
 
 <script>
+if (document.getElementById('absenceChart')) {
 const ctx = document.getElementById('absenceChart').getContext('2d');
 new Chart(ctx, {
     type: 'line',
@@ -203,6 +132,7 @@ new Chart(ctx, {
         }]
     },
     options: {
+        maintainAspectRatio: false,
         plugins: {
             legend: {
                 display: false
@@ -218,6 +148,7 @@ new Chart(ctx, {
         }
     }
 });
+}
 </script>
 
 @endsection

@@ -4,551 +4,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
+    <meta name="theme-color" content="#f6f8fb">
     <title>@yield('title', 'Gestion des Absences')</title>
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <style>
-        :root{
-            --bg:#f6f8fc;
-            --card:#ffffff;
-            --text:#0f172a;
-            --muted:#64748b;
-            --border:#e5e7eb;
-            --primary:#2563eb;
-            --radius:14px;
-        }
-
-        body{
-            background:var(--bg);
-            font-family: system-ui, Arial;
-            color:var(--text);
-        }
-
-        /* ===== SIDEBAR ===== */
-        .sidebar{
-            position:fixed;
-            inset:0 auto 0 0;
-            width:250px;
-            background:var(--card);
-            border-right:1px solid var(--border);
-            padding:22px;
-        }
-
-        .brand{
-            font-size:18px;
-            font-weight:800;
-            margin-bottom:24px;
-        }
-
-        .nav-link{
-            display:flex;
-            padding:10px 12px;
-            border-radius:10px;
-            color:var(--muted);
-            font-size:14px;
-            margin-bottom:6px;
-            transition:.2s;
-        }
-
-        .nav-link:hover{
-            background:#f1f5f9;
-            color:var(--text);
-        }
-
-        .nav-link.active{
-            background:var(--primary);
-            color:#fff;
-        }
-
-        /* ===== MAIN ===== */
-        .main{
-            margin-left:250px;
-            padding:24px;
-        }
-
-        /* ===== TOPBAR ===== */
-        .topbar{
-            background:var(--card);
-            border:1px solid var(--border);
-            padding:14px 18px;
-            border-radius:var(--radius);
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-            margin-bottom:20px;
-        }
-
-        .page-title{
-            font-size:18px;
-            font-weight:800;
-        }
-
-        /* ===== CARDS ===== */
-        .card-box{
-            background:var(--card);
-            border:1px solid var(--border);
-            border-radius:var(--radius);
-            padding:18px;
-        }
-
-        .metric-label{
-            font-size:12px;
-            color:var(--muted);
-            text-transform:uppercase;
-            font-weight:600;
-        }
-
-        .metric-value{
-            font-size:28px;
-            font-weight:800;
-            margin-top:6px;
-        }
-
-        /* ===== TABLE ===== */
-        table{
-            width:100%;
-            background:var(--card);
-            border:1px solid var(--border);
-            border-radius:var(--radius);
-            overflow:hidden;
-        }
-
-        th{
-            font-size:12px;
-            color:var(--muted);
-            text-transform:uppercase;
-            background:#f8fafc;
-        }
-
-        td,th{
-            padding:12px 14px;
-        }
-
-        tbody tr:hover{
-            background:#f9fafb;
-        }
-
-        /* ===== BUTTON ===== */
-        .btn{
-            border-radius:10px;
-        }
-
-        /* ===== MODERN SHELL OVERRIDES ===== */
-        body{
-            background:
-                radial-gradient(circle at top left, rgba(37,99,235,0.08), transparent 30%),
-                linear-gradient(180deg, #f8fafc 0%, #eef3f8 100%);
-            font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
-        }
-
-        .sidebar{
-            width:272px;
-            padding:24px 18px;
-            background:rgba(255,255,255,0.92);
-            backdrop-filter:blur(14px);
-            box-shadow:12px 0 30px rgba(15,23,42,0.04);
-        }
-
-        .brand{
-            display:flex;
-            align-items:center;
-            gap:12px;
-            font-size:17px;
-            letter-spacing:0;
-            margin-bottom:28px;
-            padding:6px 4px;
-        }
-
-        .brand-mark,
-        .topbar-mark{
-            display:grid;
-            place-items:center;
-            width:38px;
-            height:38px;
-            border-radius:12px;
-            background:linear-gradient(135deg, #2563eb, #14b8a6);
-            color:#fff;
-            font-weight:900;
-            box-shadow:0 12px 24px rgba(37,99,235,0.22);
-            flex:0 0 auto;
-        }
-
-        .nav-link{
-            align-items:center;
-            gap:10px;
-            padding:12px 14px;
-            border-radius:12px;
-            font-weight:650;
-            letter-spacing:0;
-        }
-
-        .nav-link.active{
-            background:#0f172a;
-            box-shadow:0 12px 24px rgba(15,23,42,0.14);
-        }
-
-        .main{
-            margin-left:272px;
-            padding:28px;
-        }
-
-        .topbar{
-            min-height:76px;
-            padding:16px 18px;
-            border:1px solid rgba(226,232,240,0.9);
-            border-radius:20px;
-            box-shadow:0 18px 45px rgba(15,23,42,0.06);
-        }
-
-        .topbar-brand{
-            display:flex;
-            align-items:center;
-            gap:14px;
-        }
-
-        .topbar-mark{
-            width:42px;
-            height:42px;
-        }
-
-        .page-title{
-            font-size:22px;
-            line-height:1.15;
-        }
-
-        .app-eyebrow{
-            color:#64748b;
-            font-size:12px;
-            font-weight:800;
-            letter-spacing:0.08em;
-            text-transform:uppercase;
-        }
-
-        .card-box{
-            border:1px solid rgba(226,232,240,0.95);
-            border-radius:18px;
-            box-shadow:0 16px 38px rgba(15,23,42,0.06);
-        }
-
-        .table{
-            border-collapse:separate;
-            border-spacing:0 8px;
-            border:0;
-            background:transparent;
-        }
-
-        .table thead th{
-            border:0;
-            background:transparent;
-            color:#64748b;
-            font-size:11px;
-            font-weight:800;
-            letter-spacing:0.08em;
-        }
-
-        .table tbody tr{
-            background:#fff;
-            box-shadow:0 8px 20px rgba(15,23,42,0.04);
-            transition:transform .18s ease, box-shadow .18s ease, background .18s ease;
-        }
-
-        .table tbody tr:hover{
-            background:#f8fafc;
-            transform:translateY(-1px);
-            box-shadow:0 14px 28px rgba(15,23,42,0.07);
-        }
-
-        .table tbody td{
-            border-top:1px solid #eef2f7;
-            border-bottom:1px solid #eef2f7;
-            padding:16px 14px;
-            vertical-align:middle;
-        }
-
-        .table tbody td:first-child{
-            border-left:1px solid #eef2f7;
-            border-radius:14px 0 0 14px;
-        }
-
-        .table tbody td:last-child{
-            border-right:1px solid #eef2f7;
-            border-radius:0 14px 14px 0;
-        }
-
-        .status-badge{
-            display:inline-flex;
-            align-items:center;
-            justify-content:center;
-            min-width:86px;
-            min-height:30px;
-            padding:6px 12px;
-            border-radius:999px;
-            font-size:12px;
-            font-weight:800;
-            line-height:1;
-            letter-spacing:0;
-            white-space:nowrap;
-        }
-
-        .status-badge--present{ background:#dcfce7; color:#15803d; }
-        .status-badge--absent{ background:#fee2e2; color:#b91c1c; }
-        .status-badge--repos{ background:#ede9fe; color:#5b21b6; }
-        .status-badge--conge{ background:#ffedd5; color:#c2410c; }
-        .status-badge--maladie{ background:#e0e7ff; color:#4338ca; }
-        .status-badge--late{ background:#fef3c7; color:#b45309; }
-        .status-badge--default{ background:#f1f5f9; color:#475569; }
-
-        .page-head{
-            display:flex;
-            justify-content:space-between;
-            align-items:flex-end;
-            gap:18px;
-            margin-bottom:22px;
-        }
-
-        .page-kicker{
-            color:#64748b;
-            font-size:13px;
-            font-weight:750;
-        }
-
-        .page-heading{
-            margin:0;
-            font-size:28px;
-            font-weight:900;
-            letter-spacing:0;
-            line-height:1.15;
-        }
-
-        .page-subtitle{
-            margin-top:6px;
-            color:#64748b;
-            font-size:14px;
-            font-weight:650;
-        }
-
-        .panel-head{
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-            gap:16px;
-            margin-bottom:18px;
-        }
-
-        .section-title{
-            margin:0;
-            font-size:20px;
-            font-weight:900;
-        }
-
-        .section-sub{
-            color:#64748b;
-            font-size:13px;
-            font-weight:650;
-        }
-
-        .form-label{
-            color:#334155;
-            font-size:13px;
-            font-weight:800;
-            margin-bottom:8px;
-        }
-
-        .form-control,
-        .form-select{
-            border-radius:14px;
-            border:1px solid #dbe3ef;
-            font-weight:650;
-        }
-
-        .form-control:focus,
-        .form-select:focus{
-            border-color:#2563eb;
-            box-shadow:0 0 0 4px rgba(37,99,235,0.10);
-        }
-
-        .control-lg{
-            min-height:48px;
-            padding:11px 14px;
-        }
-
-        .table-toolbar{
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-            gap:14px;
-            flex-wrap:wrap;
-            margin-bottom:18px;
-        }
-
-        .search-field{
-            width:min(100%, 360px);
-            min-height:48px;
-            background:#fff;
-        }
-
-        .employee-cell{
-            display:flex;
-            flex-direction:column;
-            gap:3px;
-        }
-
-        .employee-name{
-            font-weight:850;
-            color:#0f172a;
-        }
-
-        .employee-meta{
-            color:#64748b;
-            font-size:12px;
-            font-weight:600;
-        }
-
-        .metric-grid{
-            display:grid;
-            grid-template-columns:repeat(4, minmax(0, 1fr));
-            gap:18px;
-            margin-bottom:24px;
-        }
-
-        .metric-card{
-            position:relative;
-            overflow:hidden;
-            min-height:148px;
-            padding:22px;
-            border-radius:20px;
-            border:1px solid rgba(226,232,240,0.95);
-            background:#fff;
-            box-shadow:0 18px 42px rgba(15,23,42,0.07);
-        }
-
-        .metric-card:after{
-            content:"";
-            position:absolute;
-            right:-32px;
-            top:-38px;
-            width:112px;
-            height:112px;
-            border-radius:999px;
-            opacity:.12;
-            background:var(--metric-color, #2563eb);
-        }
-
-        .metric-top{
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-            gap:12px;
-            margin-bottom:18px;
-        }
-
-        .metric-icon{
-            display:grid;
-            place-items:center;
-            width:44px;
-            height:44px;
-            border-radius:14px;
-            background:var(--metric-soft, #dbeafe);
-            color:var(--metric-color, #2563eb);
-        }
-
-        .metric-number{
-            font-size:40px;
-            line-height:1;
-            font-weight:950;
-            letter-spacing:0;
-            color:var(--metric-color, #0f172a);
-        }
-
-        .metric-card .metric-label{
-            color:#475569;
-            font-size:13px;
-            font-weight:850;
-            text-transform:none;
-        }
-
-        .metric-subtitle{
-            margin-top:10px;
-            color:#64748b;
-            font-size:13px;
-            font-weight:650;
-        }
-
-        .metric-present{ --metric-color:#15803d; --metric-soft:#dcfce7; }
-        .metric-absent{ --metric-color:#b91c1c; --metric-soft:#fee2e2; }
-        .metric-conge{ --metric-color:#c2410c; --metric-soft:#ffedd5; }
-        .metric-repos{ --metric-color:#5b21b6; --metric-soft:#ede9fe; }
-        .metric-primary{ --metric-color:#2563eb; --metric-soft:#dbeafe; }
-        .metric-neutral{ --metric-color:#475569; --metric-soft:#f1f5f9; }
-
-        .soft-panel{
-            border-radius:18px;
-            border:1px solid #eef2f7;
-            background:#f8fafc;
-            padding:16px;
-        }
-
-        .btn{
-            border-radius:12px;
-            font-weight:750;
-        }
-
-        @media (max-width: 900px){
-            .sidebar{
-                position:sticky;
-                inset:auto;
-                width:100%;
-                display:flex;
-                flex-wrap:wrap;
-                gap:8px;
-                padding:14px;
-                border-right:0;
-                border-bottom:1px solid var(--border);
-            }
-
-            .brand{
-                width:100%;
-                margin-bottom:4px;
-            }
-
-            .main{
-                margin-left:0;
-                padding:16px;
-            }
-
-            .topbar{
-                align-items:flex-start;
-                gap:14px;
-                flex-direction:column;
-            }
-
-            .page-head,
-            .panel-head{
-                align-items:flex-start;
-                flex-direction:column;
-            }
-
-            .metric-grid{
-                grid-template-columns:1fr;
-            }
-
-            .search-field{
-                width:100%;
-            }
-        }
-
-        @media (min-width: 901px) and (max-width: 1200px){
-            .metric-grid{
-                grid-template-columns:repeat(2, minmax(0, 1fr));
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="{{ asset('vendor/bootstrap.min.css') }}">
+    @vite(['resources/css/admin.css', 'resources/js/admin.js'])
+    <script src="{{ asset('vendor/lucide.min.js') }}" defer></script>
 </head>
-
-<body>
-
+<body class="admin-app">
 @php
     $uiMessage = function (?string $message): string {
         return [
@@ -600,64 +62,82 @@
         ][$message ?? ''] ?? (string) $message;
     };
 @endphp
-
-<!-- SIDEBAR -->
-<div class="sidebar">
-    <div class="brand">
-        <span class="brand-mark">GA</span>
-        <span>Gestion des Absences</span>
+@php
+    $currentUser = session('user_id') ? \App\Models\User::find(session('user_id')) : null;
+    $userName = $currentUser?->name ?? 'Administrateur';
+    $navigation = [
+        ['route' => 'admin.dashboard', 'match' => 'admin.dashboard', 'label' => 'Tableau de bord', 'icon' => 'layout-dashboard'],
+        ['route' => 'employees.index', 'match' => 'employees.*', 'label' => 'Employés', 'icon' => 'users'],
+        ['route' => 'attendance.index', 'match' => 'attendance.*', 'label' => 'Présences', 'icon' => 'user-check'],
+        ['route' => 'absences.index', 'match' => 'absences.*', 'label' => 'Absences', 'icon' => 'user-x'],
+        ['route' => 'planning.index', 'match' => 'planning.*', 'label' => 'Planning', 'icon' => 'calendar-days'],
+        ['route' => 'reports.index', 'match' => 'reports.*', 'label' => 'Rapports', 'icon' => 'chart-no-axes-combined'],
+    ];
+    $activePage = collect($navigation)->first(fn ($item) => request()->routeIs($item['match']))['label'] ?? 'Espace RH';
+@endphp
+<a class="skip-link" href="#main-content">Aller au contenu</a>
+<button type="button" class="sidebar-overlay" data-close-sidebar aria-label="Fermer la navigation" hidden></button>
+<aside class="sidebar" id="app-sidebar" aria-label="Navigation principale">
+    <a href="{{ route('admin.dashboard') }}" class="brand" title="Gestion des Absences">
+        <span class="brand-mark">GA<span></span></span>
+        <span class="brand-copy"><strong>Gestion des Absences</strong><small>ESPACE RH</small></span>
+    </a>
+    <div class="workspace-label"><span class="workspace-dot"></span><span>Gestion du personnel</span><x-icon name="chevrons-up-down" /></div>
+    <div class="nav-section-label">ESPACE DE TRAVAIL</div>
+    <nav>
+        @foreach($navigation as $item)
+            <a class="nav-link {{ request()->routeIs($item['match']) ? 'active' : '' }}" href="{{ route($item['route']) }}" title="{{ $item['label'] }}" @if(request()->routeIs($item['match'])) aria-current="page" @endif>
+                <x-icon :name="$item['icon']" /><span>{{ $item['label'] }}</span>
+            </a>
+        @endforeach
+    </nav>
+    <div class="sidebar-bottom">
+        <button type="button" class="nav-link sidebar-collapse" data-toggle-sidebar title="Réduire la navigation" aria-label="Réduire la navigation"><x-icon name="panel-left-close" /><span>Réduire le menu</span></button>
+        <div class="sidebar-profile"><x-user-menu :name="$userName" placement="bottom" /></div>
     </div>
-
-    <a class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" href="{{ route('admin.dashboard') }}">Tableau de bord</a>
-    <a class="nav-link {{ request()->routeIs('employees.*') ? 'active' : '' }}" href="{{ route('employees.index') }}">Employés</a>
-    <a class="nav-link {{ request()->routeIs('attendance.*') ? 'active' : '' }}" href="{{ route('attendance.index') }}">Présences</a>
-    <a class="nav-link {{ request()->routeIs('absences.*') ? 'active' : '' }}" href="{{ route('absences.index') }}">Absences</a>
-    <a class="nav-link {{ request()->routeIs('planning.*') ? 'active' : '' }}" href="{{ route('planning.index') }}">Planning</a>
-    <a class="nav-link {{ request()->routeIs('reports.*') ? 'active' : '' }}" href="{{ route('reports.index') }}">Rapports</a>
-</div>
-
-<!-- MAIN -->
+</aside>
 <div class="main">
-
-    <!-- TOPBAR -->
-    <div class="topbar">
-        <div class="topbar-brand">
-            <span class="topbar-mark">GA</span>
-            <div>
-                <div class="app-eyebrow">@yield('eyebrow','Gestion des Absences')</div>
-                <div class="page-title">@yield('page-title','Tableau de bord')</div>
-            </div>
+    <header class="topbar">
+        <div class="topbar-left">
+            <button class="icon-button mobile-menu" type="button" data-toggle-sidebar aria-label="Ouvrir la navigation" aria-controls="app-sidebar" aria-expanded="false" title="Navigation"><x-icon name="menu" /></button>
+            <nav class="breadcrumbs" aria-label="Fil d’Ariane"><span>Gestion des Absences</span><x-icon name="chevron-right" /><span aria-current="page">{{ $activePage }}</span></nav>
         </div>
-
-        <form method="POST" action="{{ route('logout') }}">
-            @csrf
-            <button class="btn btn-dark btn-sm">Déconnexion</button>
-        </form>
-    </div>
-
-    <!-- ALERTS -->
-    @if(session('success'))
-        <div class="alert alert-success">{{ $uiMessage(session('success')) }}</div>
-    @endif
-
-    @if(session('error'))
-        <div class="alert alert-danger">{{ $uiMessage(session('error')) }}</div>
-    @endif
-
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <b>Veuillez corriger les erreurs</b>
-            <ul class="mb-0">
-                @foreach ($errors->all() as $error)
-                    <li>{{ $uiMessage($error) }}</li>
-                @endforeach
-            </ul>
+        <div class="topbar-actions">
+            <button type="button" class="global-search" data-open-dialog="search-dialog"><x-icon name="search" /><span>Rechercher dans votre espace</span><kbd>⌘ K</kbd></button>
+            <details class="dropdown notifications">
+                <summary class="icon-button" aria-label="Notifications" title="Notifications"><x-icon name="bell" /></summary>
+                <div class="dropdown-panel notification-panel"><h2>Notifications</h2>
+                    @if(session('success'))<p>{{ $uiMessage(session('success')) }}</p>
+                    @else<x-empty-state title="Vous êtes à jour" description="Aucune nouvelle notification." icon="bell-off" />@endif
+                </div>
+            </details>
+            <span class="topbar-divider"></span>
+            <x-user-menu :name="$userName" />
         </div>
-    @endif
-
-    @yield('content')
-
+    </header>
+    <main id="main-content" class="page-content" tabindex="-1">
+        @if(session('success'))
+            <div class="app-toast" role="status" data-toast><span class="toast-symbol"><x-icon name="circle-check" /></span><span>{{ $uiMessage(session('success')) }}</span><button type="button" class="icon-button" data-dismiss-toast aria-label="Fermer la notification" title="Fermer"><x-icon name="x" /></button></div>
+        @endif
+        @if(session('error'))<div class="alert alert-danger" role="alert">{{ $uiMessage(session('error')) }}</div>@endif
+        @if($errors->any())
+            <div class="alert alert-danger" role="alert"><strong>Veuillez corriger les erreurs</strong><ul class="mb-0">@foreach($errors->all() as $error)<li>{{ $uiMessage($error) }}</li>@endforeach</ul></div>
+        @endif
+        @yield('content')
+        <footer class="page-footer"><span>Gestion des Absences</span><span>Espace administrateur</span></footer>
+    </main>
 </div>
 
+<dialog id="search-dialog" class="app-dialog search-dialog" aria-labelledby="search-title">
+    <div class="dialog-head"><h2 id="search-title">Rechercher</h2><button type="button" class="icon-button" data-close-dialog title="Fermer" aria-label="Fermer"><x-icon name="x" /></button></div>
+    <form method="GET" action="{{ route('employees.index') }}" class="dialog-search">
+        <label class="visually-hidden" for="global-query">Nom, département ou poste</label>
+        <x-icon name="search" /><input id="global-query" name="search" placeholder="Nom, département ou poste…" autofocus required maxlength="255"><button type="submit" class="icon-button" aria-label="Rechercher les employés" title="Rechercher"><x-icon name="arrow-right" /></button>
+    </form>
+    <div class="search-links"><span class="nav-section-label">ACCÈS RAPIDE</span>@foreach($navigation as $item)<a href="{{ route($item['route']) }}"><x-icon :name="$item['icon']" />{{ $item['label'] }}<x-icon name="arrow-up-right" /></a>@endforeach</div>
+</dialog>
+<x-account-panels :user="$currentUser" :name="$userName" />
+@stack('dialogs')
+@stack('scripts')
 </body>
 </html>

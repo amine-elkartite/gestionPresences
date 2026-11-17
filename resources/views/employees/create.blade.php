@@ -13,7 +13,7 @@
     </div>
 
     <div class="card-box">
-        <form method="POST" action="{{ route('employees.store') }}">
+        <form method="POST" action="{{ route('employees.store') }}" data-submit-state>
             @include('employees._form', ['button' => 'Créer l’employé'])
         </form>
     </div>

@@ -42,6 +42,7 @@ class PinLoginController extends Controller
         }
 
         $request->session()->put('role', $user->role);
+        $request->session()->put('user_id', $user->id);
 
         if ($user->isEmployee()) {
             $request->session()->put('employee_id', $user->employee->id);

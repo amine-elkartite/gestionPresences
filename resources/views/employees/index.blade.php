@@ -13,7 +13,7 @@
     </div>
 
     <a class="btn btn-primary px-4 py-2" href="{{ route('employees.create') }}">
-        + Ajouter un employé
+        <x-icon name="plus" /> Ajouter un employé
     </a>
 </div>
 
@@ -28,7 +28,7 @@
             <input class="form-control search-field"
                    name="search"
                    value="{{ $search }}"
-                   placeholder="Rechercher un employé">
+                   placeholder="Rechercher un employé" aria-label="Rechercher un employé">
 
             <button class="btn btn-outline-primary px-4">
                 Rechercher
@@ -55,10 +55,10 @@
                 @forelse ($employees as $employee)
                     <tr>
                         <td>
-                            <div class="employee-cell">
+                            <div class="employee-identity"><x-user-avatar :name="$employee->name" /><div class="employee-cell">
                                 <span class="employee-name">{{ $employee->name }}</span>
                                 <span class="employee-meta">{{ $employee->department ?? 'Personnel' }}</span>
-                            </div>
+                            </div></div>
                         </td>
                         <td>{{ $employee->email ?? '-' }}</td>
                         <td>{{ $employee->phone ?? '-' }}</td>
@@ -78,9 +78,9 @@
 
                         <td class="text-end">
                             <div class="d-inline-flex flex-wrap justify-content-end gap-2">
-                                <a class="btn btn-sm btn-outline-primary"
+                                <a class="icon-button" title="Modifier le profil" aria-label="Modifier {{ $employee->name }}"
                                    href="{{ route('employees.edit', $employee) }}">
-                                    Modifier
+                                    <x-icon name="pencil" />
                                 </a>
 
                                 <form method="POST"
@@ -89,8 +89,8 @@
                                     @csrf
                                     @method('DELETE')
 
-                                    <button class="btn btn-sm btn-outline-danger">
-                                        Supprimer
+                                    <button class="icon-button text-danger" title="Supprimer l’employé" aria-label="Supprimer {{ $employee->name }}">
+                                        <x-icon name="trash-2" />
                                     </button>
                                 </form>
                             </div>

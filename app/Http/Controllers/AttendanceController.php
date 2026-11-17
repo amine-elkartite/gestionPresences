@@ -17,6 +17,11 @@ class AttendanceController extends Controller
         Request $request,
         AttendanceStatusService $statusService
     ): View {
+        $request->validate([
+            'date' => ['nullable', 'date_format:Y-m-d'],
+            'search' => ['nullable', 'string', 'max:255'],
+        ]);
+        $search = trim($request->string('search')->toString());
         $date = Carbon::parse(
             $request->input('date', today()->toDateString())
         )->toDateString();
@@ -88,10 +93,13 @@ class AttendanceController extends Controller
             ];
         });
 
+        $attendanceRows = $attendanceRows->filter(fn ($row) => $search === '' || mb_stripos($row->employee->name, $search) !== false);
+
         return view('attendance.index', compact(
             'attendanceRows',
             'employees',
-            'date'
+            'date',
+            'search'
         ));
     }
 

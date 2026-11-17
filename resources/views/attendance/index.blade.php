@@ -13,7 +13,7 @@
     </div>
 
     <form method="GET" class="d-flex flex-wrap gap-2">
-        <input class="form-control control-lg" type="date" name="date" value="{{ $date }}">
+        <input class="form-control control-lg" type="date" name="date" value="{{ $date }}" aria-label="Date des présences"><input class="form-control" name="search" value="{{ $search }}" placeholder="Rechercher un employé" aria-label="Rechercher un employé">
         <button class="btn btn-outline-primary px-4">Filtrer</button>
     </form>
 </div>
@@ -26,16 +26,16 @@
         </div>
     </div>
 
-    <form method="POST" action="{{ route('attendance.store') }}">
+    <form method="POST" action="{{ route('attendance.store') }}" data-submit-state>
         @csrf
 
         <div class="row g-3 align-items-end">
             <div class="col-lg-4 col-md-6">
-                <label class="form-label">Employé</label>
-                <select class="form-select control-lg" name="user_id" required>
+                <label class="form-label" for="field-attendance-1">Employé</label>
+                <select id="field-attendance-1" class="form-select control-lg" name="user_id" required>
                     <option value="">Sélectionner un employé</option>
                     @foreach ($employees as $employee)
-                        <option value="{{ $employee->user_id }}">
+                        <option value="{{ $employee->user_id }}" @selected((string) old('user_id') === (string) $employee->user_id)>
                             {{ $employee->name }}
                         </option>
                     @endforeach
@@ -43,18 +43,18 @@
             </div>
 
             <div class="col-lg-2 col-md-6">
-                <label class="form-label">Date</label>
-                <input type="date" class="form-control control-lg" name="date" value="{{ $date }}">
+                <label class="form-label" for="field-attendance-2">Date</label>
+                <input id="field-attendance-2" type="date" class="form-control control-lg" name="date" value="{{ $date }}">
             </div>
 
             <div class="col-lg-2 col-md-6">
-                <label class="form-label">Entrée</label>
-                <input type="time" class="form-control control-lg" name="check_in_time">
+                <label class="form-label" for="field-attendance-3">Entrée</label>
+                <input id="field-attendance-3" type="time" class="form-control control-lg" name="check_in_time" value="{{ old('check_in_time') }}">
             </div>
 
             <div class="col-lg-2 col-md-6">
-                <label class="form-label">Sortie</label>
-                <input type="time" class="form-control control-lg" name="check_out_time">
+                <label class="form-label" for="field-attendance-4">Sortie</label>
+                <input id="field-attendance-4" type="time" class="form-control control-lg" name="check_out_time" value="{{ old('check_out_time') }}">
             </div>
 
             <div class="col-lg-2 col-md-12">
@@ -86,42 +86,22 @@
 
             <tbody>
                 @forelse ($attendanceRows as $row)
-                    @php
-                        $statusKey = strtolower((string) $row->status);
-                        $badge = match(true) {
-                            str_contains($statusKey, 'present') => 'status-badge--present',
-                            str_contains($statusKey, 'absent') => 'status-badge--absent',
-                            str_contains($statusKey, 'repos') => 'status-badge--repos',
-                            str_contains($statusKey, 'cong') => 'status-badge--conge',
-                            str_contains($statusKey, 'maladie') => 'status-badge--maladie',
-                            str_contains($statusKey, 'late') => 'status-badge--late',
-                            default => 'status-badge--default',
-                        };
-                        $statusLabel = match(true) {
-                            str_contains($statusKey, 'present') => 'Présent',
-                            str_contains($statusKey, 'absent') => 'Absent',
-                            str_contains($statusKey, 'repos') => 'Repos',
-                            str_contains($statusKey, 'cong') => 'Congé',
-                            str_contains($statusKey, 'maladie') => 'Maladie',
-                            str_contains($statusKey, 'late') => 'En retard',
-                            default => $row->status,
-                        };
-                    @endphp
+
 
                     <tr>
                         <td>
-                            <div class="employee-cell">
+                            <div class="employee-identity"><x-user-avatar :name="$row->employee->name" /><div class="employee-cell">
                                 <span class="employee-name">{{ $row->employee->name }}</span>
                                 <span class="employee-meta">{{ $row->employee->position ?? $row->employee->department ?? '-' }}</span>
-                            </div>
+                            </div></div>
                         </td>
 
                         <td>
-                            <span class="status-badge {{ $badge }}">{{ $statusLabel }}</span>
+                            <x-status-badge :status="$row->status" />
                         </td>
 
-                        <td class="fw-semibold">{{ $row->check_in_time ?? '-' }}</td>
-                        <td class="fw-semibold">{{ $row->check_out_time ?? '-' }}</td>
+                        <td class="fw-semibold">{{ $row->check_in_time ? substr($row->check_in_time, 0, 5) : '—' }}</td>
+                        <td class="fw-semibold">{{ $row->check_out_time ? substr($row->check_out_time, 0, 5) : '—' }}</td>
 
                         <td class="fw-bold">
                             {{ $row->worked_hours ?? 0 }} h
